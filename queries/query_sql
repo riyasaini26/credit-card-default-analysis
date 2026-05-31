@@ -1,0 +1,98 @@
+--First checking the columns
+SELECT count(column_name)
+FROM `credit_risk`.INFORMATION_SCHEMA.COLUMNS
+WHERE table_name = 'credit_card_default';
+
+--Checking for values
+SELECT * 
+FROM `credit_risk.credit_card_default`
+LIMIT 100;
+
+--Cheking for null values
+SELECT * 
+FROM `credit_risk.credit_card_default`
+WHERE SEX is NULL OR EDUCATION is NULL or MARRIAGE is NULL or AGE is NULL;
+
+-- Overall Default  Rate > What % of customers defaulted?
+SELECT 
+  default_payment_next_month, COUNT(*) AS total_customers,
+  ROUND(COUNT(*) * 100.0 / SUM(COUNT (*)) OVER(),2)
+FROM `credit_risk.credit_card_default`
+GROUP BY default_payment_next_month;
+--22% people have defaulted
+
+--Default Rate by Credit Limit Bucket
+SELECT MAX(LIMIT_BAL) as max_limit, MIN(LIMIT_BAL) as min_limit
+FROM `credit_risk.credit_card_default`;
+
+SELECT 
+CASE 
+  WHEN LIMIT_BAL<50000 THEN "LOW(<50K)"
+  WHEN LIMIT_BAL<200000 THEN "MEDIUM(>50K AND <200K)"
+  ELSE "HIGH(>200K)"
+  END AS credit_limit,
+  COUNT(*) AS total_customers,
+  SUM(default_payment_next_month) as defaulters_count,
+  ROUND(SUM(default_payment_next_month)/COUNT(*),2) AS default_rate
+FROM `credit_risk.credit_card_default`
+GROUP BY credit_limit
+ORDER BY credit_limit DESC;
+
+--Default Rate by Age Group
+SELECT MAX(AGE) as max_age, MIN(AGE) as min_age
+FROM `credit_risk.credit_card_default`;
+
+SELECT 
+CASE 
+  WHEN AGE<30 THEN "Under 30"
+  WHEN AGE<40 THEN "BETWEEN 30 and 40"
+  WHEN AGE<50 THEN "BETWEEN 40 and 50"
+  ELSE "GREATER THAN 50"
+  END AS age_category,
+  COUNT(*) AS total_customers,
+  SUM(default_payment_next_month) as defaulters_count,
+  ROUND(SUM(default_payment_next_month)/COUNT(*),2) AS default_rate
+FROM `credit_risk.credit_card_default`
+GROUP BY age_category
+ORDER BY age_category DESC;
+
+--Default Rate by Education Level
+SELECT MAX(EDUCATION) as max_edu, MIN(EDUCATION) as min_edu
+FROM `credit_risk.credit_card_default`;
+
+SELECT 
+CASE EDUCATION
+  WHEN 1 THEN "Graduate School"
+  WHEN 2 THEN "University"
+  WHEN 3 THEN "High School"
+  WHEN 4 THEN "Others"
+  ELSE "Unknown"
+  END AS education_category,
+  COUNT(*) AS total_customers,
+  SUM(default_payment_next_month) as defaulters_count,
+  ROUND(SUM(default_payment_next_month)/COUNT(*),2) AS default_rate
+FROM `credit_risk.credit_card_default`
+GROUP BY education_category
+ORDER BY education_category DESC;
+
+--Payment Delay Analysis- Do customers who delay payment in month 1 eventually default?
+
+SELECT
+  PAY_0 AS payment_status_month1,
+  COUNT(*) AS total_customers,
+  SUM(default_payment_next_month) AS defaulters,
+  ROUND(SUM(default_payment_next_month) * 100.0 / COUNT(*), 2) AS default_rate
+FROM `credit_risk.credit_card_default`
+GROUP BY PAY_0
+ORDER BY PAY_0;
+
+--High Risk Segment
+SELECT CASE WHEN AGE<30 THEN "LESS THAN 30" ELSE "GREATER THAN 30" END AS age_category,
+ CASE WHEN LIMIT_BAL < 50000 THEN 'Low Credit' ELSE 'Higher Credit' END AS credit_bucket,
+  CASE EDUCATION WHEN 1 THEN 'Graduate' WHEN 2 THEN 'University' ELSE 'Others' END AS education,
+  COUNT(*) AS total_customers,ROUND(SUM(default_payment_next_month) * 100.0 / COUNT(*), 2) AS default_rate
+FROM `credit_risk.credit_card_default`
+GROUP BY age_category, credit_bucket, education
+ORDER BY default_rate DESC;
+
+
