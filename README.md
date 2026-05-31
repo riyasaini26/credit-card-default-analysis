@@ -9,7 +9,7 @@ should be targeted for a new credit card offer.
 ## Dataset
 - **Source:** UCI Machine Learning Repository / Kaggle
 - **Dataset:** Default of Credit Card Clients 
-🔗 [Default of Credit Card Clients - Kaggle]([https://www.kaggle.com/datasets/uciml/default-of-credit-card-clients-dataset](https://www.kaggle.com/datasets/uciml/default-of-credit-card-clients-dataset?resource=download))
+🔗 [Default of Credit Card Clients - Kaggle](https://www.kaggle.com/datasets/uciml/default-of-credit-card-clients-dataset?resource=download)
 - **Size:** 30,000 customer records
 - **Features:** Demographics, credit limit, payment history (6 months), bill amounts
 
