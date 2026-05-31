@@ -20,13 +20,13 @@ should be targeted for a new credit card offer.
 ## Key Insights
 
 ### 1. Overall Default Rate
-- 22% of customers defaulted on their next payment
-- 78% of customers were reliable payers
+- 22.12% of customers defaulted on their next payment
+- 77.88% of customers were reliable payers
 
 ### 2. Payment Delay is the Strongest Risk Signal
-- Customers with **2 month payment delay** had a **69% default rate**
-- Customers with **1 month payment delay** had a **34% default rate**
-- Customers who paid on time had only a **13% default rate**
+- Customers with **More than 2 month payment delay** had a **69.6% default rate**
+- Customers with **1 month payment delay** had a **33.9% default rate**
+- Customers who paid on time had only a **16.8% default rate**
 
 ### 3. Credit Limit Bucket Analysis
 - Low credit limit customers (<50K) showed higher default rates
